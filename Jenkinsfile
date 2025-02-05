@@ -23,7 +23,10 @@ pipeline {
          stage('Test stage') {
             steps {
                 sh '''
+                    ls -la
                     echo 'Test stage'
+                    grep index
+                    test -f build/index.html || { echo "Error: build/index.html not found!"; exit 1; }
                 '''
             }
         }
