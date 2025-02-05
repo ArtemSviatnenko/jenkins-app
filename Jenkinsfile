@@ -24,6 +24,7 @@ pipeline {
             steps {
                 sh '''
                     ls -la
+                    node --version
                     echo 'Test stage'
                     test -f build/index.html || { echo "Error: build/index.html not found!"; exit 1; }
                     npm test
