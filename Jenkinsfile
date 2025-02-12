@@ -79,29 +79,18 @@ pipeline {
         stage('Deploy staging') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    image 'node:18-bullseye'
                     reuseNode true
                 }
             }
             steps {
                 sh '''
-                    # Create a local package directory
-                    export PATH=$HOME/.local/bin:$PATH
-                    mkdir -p $HOME/.local
-
-                    # Install Python and build tools in user space
-                    python3 -m venv $HOME/.local/venv
-                    source $HOME/.local/venv/bin/activate
-
-                    # Install Netlify CLI and node-jq in user space
-                    npm install --prefix $HOME/.local netlify-cli node-jq
-
-                    # Use the locally installed binaries
-                    $HOME/.local/node_modules/.bin/netlify --version
+                    npm install netlify-cli node-jq
+                    node_modules/.bin/netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
-                    $HOME/.local/node_modules/.bin/netlify status
-                    $HOME/.local/node_modules/.bin/netlify deploy --dir=build --json > deploy-output.json
-                    $HOME/.local/node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json
+                    node_modules/.bin/netlify status
+                    node_modules/.bin/netlify deploy --dir=build --json > deploy-output.json
+                    node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json
                 '''
             }
         }
