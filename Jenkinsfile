@@ -85,6 +85,7 @@ pipeline {
             }
             steps {
                 sh '''
+                    apk add --no-cache python3 py3-pip build-base libvips-dev
                     npm install netlify-cli node-jq
                     node_modules/.bin/netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
