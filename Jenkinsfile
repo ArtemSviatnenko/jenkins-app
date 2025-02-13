@@ -4,6 +4,7 @@ pipeline {
     environment {
         NETLIFY_SITE_ID = "025acded-9a6d-4ed2-aa60-cb1245ea7c7a"
         NETLIFY_AUTH_TOKEN = credentials('netlify-token')
+        REACT_APP_VERSION = "1.0.$BUILD_ID"
     }
 
     stages {
@@ -107,14 +108,6 @@ pipeline {
             }
         }
 
-        stage('Approval') {
-            steps {
-                timeout(time: 15, unit: 'MINUTES') {
-                    input message: 'Do you wish to deploy to production?', ok: 'Yes, I am sure I want to deploy'
-                }
-            }
-        }
-
         stage('Prod E2E') {
             agent {
                 docker {
@@ -124,8 +117,6 @@ pipeline {
             }
 
             environment {
-                NETLIFY_SITE_ID = "025acded-9a6d-4ed2-aa60-cb1245ea7c7a"
-                NETLIFY_AUTH_TOKEN = credentials('netlify-token')
                 CI_ENVIRONMENT_URL = 'https://sensational-entremet-137549.netlify.app'
             }
 
